@@ -33,7 +33,7 @@ const MobileMenu = () => {
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen(true)}
-        className="ml-1 flex size-10 items-center justify-center rounded-full bg-primary-600 text-white transition-colors hover:bg-primary-700 lg:hidden"
+        className="ml-1 flex size-10 items-center justify-center rounded-full bg-primary-600 text-white transition-colors hover:bg-primary-700 xl:hidden"
       >
         <Menu className="size-4.5" />
       </button>
@@ -41,7 +41,7 @@ const MobileMenu = () => {
       <div
         onClick={close}
         aria-hidden={!open}
-        className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 z-50 overflow-hidden bg-black/50 transition-opacity duration-300 xl:hidden ${
           open ? "opacity-100" : "pointer-events-none invisible opacity-0"
         }`}
       >
@@ -52,7 +52,7 @@ const MobileMenu = () => {
           aria-label="Menu"
           inert={!open}
           onClick={(e) => e.stopPropagation()}
-          className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] overflow-y-auto bg-white shadow-2xl transition-transform duration-300 ${
+          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] overflow-y-auto bg-white shadow-2xl transition-transform duration-300 ${
             open ? "translate-x-0" : "translate-x-full"
           }`}
         >

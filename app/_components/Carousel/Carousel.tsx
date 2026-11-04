@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, type CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -15,21 +16,21 @@ const slides = [
   {
     title: "Fresh Products Delivered to your Door",
     text: "Get 20% off your first order",
-    accent: "text-green-500",
+    accent: "text-green-700",
     primary: { label: "Shop Now", href: "/products" },
     secondary: { label: "View Deals", href: "/deals" },
   },
   {
     title: "Premium Quality Guaranteed",
     text: "Fresh from farm to your table",
-    accent: "text-blue-500",
+    accent: "text-blue-600",
     primary: { label: "Shop Now", href: "/products" },
     secondary: { label: "Learn More", href: "/about" },
   },
   {
     title: "Fast & Free Delivery",
     text: "Same day delivery available",
-    accent: "text-purple-500",
+    accent: "text-purple-600",
     primary: { label: "Order Now", href: "/products" },
     secondary: { label: "Delivery Info", href: "/delivery" },
   },
@@ -76,16 +77,23 @@ export default function HeroCarousel() {
           {slides.map((slide, i) => {
             const active = i === current;
             return (
-              <CarouselItem key={slide.title} className="pl-0">
-                <div className="relative flex h-100 items-center justify-center overflow-hidden">
+              // inert: off-screen slides can't be reached with the keyboard
+              <CarouselItem key={slide.title} className="pl-0" inert={!active}>
+                <div className="relative flex h-100 items-center justify-center overflow-hidden bg-green-800">
                   {/* Slow "Ken Burns" zoom on the active slide's photo */}
-                  <div
+                  <Image
+                    src="/images/home-slider-1.png"
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    loading="eager"
+                    fetchPriority={i === 0 ? "high" : "auto"}
                     className={cn(
-                      "absolute inset-0 bg-[url(/images/home-slider-1.png)] bg-cover bg-center motion-safe:transition-transform motion-safe:duration-[7000ms] motion-safe:ease-out",
+                      "object-cover motion-safe:transition-transform motion-safe:duration-[7000ms] motion-safe:ease-out",
                       active ? "scale-110" : "scale-100",
                     )}
                   />
-                  <div className="relative h-full w-full bg-linear-to-r from-green-500/90 to-green-400/50 p-4 py-20 text-white">
+                  <div className="relative h-full w-full bg-linear-to-r from-green-700/90 to-green-500/50 p-4 py-20 text-white">
                     <div className="container mx-auto h-full content-center px-8">
                       <h2
                         className={cn(
@@ -126,36 +134,43 @@ export default function HeroCarousel() {
         <CarouselPrevious className={cn("left-4", arrowClass)} />
         <CarouselNext className={cn("right-4", arrowClass)} />
 
-        <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center">
+        <div className="absolute bottom-0 left-1/2 z-10 flex -translate-x-1/2 items-center">
           {slides.map((slide, i) => (
+            // The padding makes the small dot easier to tap
             <button
               key={slide.title}
               type="button"
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === current}
               onClick={() => api?.scrollTo(i)}
-              className={cn(
-                "relative mx-1 h-3 overflow-hidden rounded-full transition-all duration-300",
-                i === current
-                  ? "w-8 bg-white/50"
-                  : "w-3 bg-white/50 hover:bg-white/75",
-              )}
+              className="group/dot px-1 py-2.5"
             >
-              {/* Autoplay: the active dot fills up like a timer, and when the
-                  fill finishes we go to the next slide. Pausing the animation
-                  (hover / focus) therefore also pauses the autoplay.
-                  key={current} restarts the fill on every slide change. */}
-              {i === current && (
-                <span
-                  key={current}
-                  onAnimationEnd={() => api?.scrollNext()}
-                  style={{ "--slide-duration": `${SLIDE_MS}ms` } as CSSProperties}
-                  className={cn(
-                    "absolute inset-0 origin-left rounded-full bg-white motion-safe:animate-progress",
-                    paused && "[animation-play-state:paused]",
-                  )}
-                />
-              )}
+              <span
+                className={cn(
+                  "relative block h-3 overflow-hidden rounded-full transition-all duration-300",
+                  i === current
+                    ? "w-8 bg-white/50"
+                    : "w-3 bg-white/50 group-hover/dot:bg-white/75",
+                )}
+              >
+                {/* Autoplay: the active dot fills up like a timer, and when the
+                    fill finishes we go to the next slide. Pausing the animation
+                    (hover / focus) therefore also pauses the autoplay.
+                    key={current} restarts the fill on every slide change. */}
+                {i === current && (
+                  <span
+                    key={current}
+                    onAnimationEnd={() => api?.scrollNext()}
+                    style={
+                      { "--slide-duration": `${SLIDE_MS}ms` } as CSSProperties
+                    }
+                    className={cn(
+                      "absolute inset-0 origin-left rounded-full bg-white motion-safe:animate-progress",
+                      paused && "[animation-play-state:paused]",
+                    )}
+                  />
+                )}
+              </span>
             </button>
           ))}
         </div>

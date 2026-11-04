@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import Form from "next/form";
@@ -10,12 +9,19 @@ import {
   ShoppingCart,
   User,
 } from "lucide-react";
+import CategoryMenu from "./CategoryMenu";
 import MobileMenu from "./MobileMenu";
-import { navCategories, navLinks } from "./navLinks";
+import { navLinks } from "./navLinks";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-40 bg-white/90 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-white/80">
+    <header className="sticky top-0 z-40 shadow-sm">
+      {/* The blur lives on its own layer: on the header itself it would trap
+          the mobile drawer's position:fixed inside the header's height. */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80"
+      />
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4 lg:h-18 lg:gap-8">
           <Link href="/" className="shrink-0">
@@ -24,7 +30,7 @@ const Navbar = () => {
               alt="FreshCart"
               width={160}
               height={31}
-              priority
+              preload
               className="h-6 w-auto lg:h-8"
             />
           </Link>
@@ -62,15 +68,7 @@ const Navbar = () => {
                   </button>
                   <div className="invisible absolute top-full left-0 pt-1 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
                     <div className="min-w-50 rounded-xl border border-gray-100 bg-white py-2 shadow-xl">
-                      {navCategories.map((cat) => (
-                        <Link
-                          key={cat.href}
-                          href={cat.href}
-                          className="block px-4 py-2.5 text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-600"
-                        >
-                          {cat.label}
-                        </Link>
-                      ))}
+                      <CategoryMenu />
                     </div>
                   </div>
                 </div>
@@ -97,7 +95,7 @@ const Navbar = () => {
                 <Headset className="size-4 text-primary-600" />
               </span>
               <span className="text-xs">
-                <span className="block text-gray-400">Support</span>
+                <span className="block text-gray-500">Support</span>
                 <span className="block font-semibold text-gray-700">
                   24/7 Help
                 </span>

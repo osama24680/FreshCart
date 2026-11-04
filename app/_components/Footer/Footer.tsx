@@ -16,9 +16,9 @@ const columns = [
       { label: "All Products", href: "/products" },
       { label: "Categories", href: "/categories" },
       { label: "Brands", href: "/brands" },
-      { label: "Electronics", href: "/products?category=6439d58a0049ad0b52b9003f" },
-      { label: "Men's Fashion", href: "/products?category=6439d2d167d9aa4ca970649f" },
-      { label: "Women's Fashion", href: "/products?category=6439d5b90049ad0b52b90048" },
+      { label: "Electronics", href: "/products?category=6439d2d167d9aa4ca970649f" },
+      { label: "Men's Fashion", href: "/products?category=6439d5b90049ad0b52b90048" },
+      { label: "Women's Fashion", href: "/products?category=6439d58a0049ad0b52b9003f" },
     ],
   },
   {
@@ -148,14 +148,14 @@ const Footer = () => {
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-center text-sm text-gray-500 md:text-left">
+            <p className="text-center text-sm text-gray-400 md:text-left">
               © <CurrentYear /> FreshCart. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               {payments.map((p) => (
                 <span
                   key={p}
-                  className="flex items-center gap-2 text-sm text-gray-500"
+                  className="flex items-center gap-2 text-sm text-gray-400"
                 >
                   <CreditCard className="size-3.5" />
                   {p}

@@ -21,7 +21,7 @@ const Features = () => {
                 <Icon className="size-4.5 text-primary-600 transition-colors group-hover:text-white" />
               </span>
               <div>
-                <h4 className="text-sm font-semibold text-gray-900">{title}</h4>
+                <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
                 <p className="text-xs text-gray-500">{text}</p>
               </div>
             </div>

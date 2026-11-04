@@ -1,15 +1,8 @@
 "use client";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-
-type From = "up" | "left" | "right" | "scale";
-
-interface IProps {
-  children: ReactNode;
-  className?: string;
-  from?: From;
-  delay?: number; // ms — use it to stagger items in a grid
-}
+import { RevealProps } from "@/interfaces";
+import { From } from "@/types";
 
 // Where the element starts before it scrolls into view.
 // Full class names only — Tailwind can't see classes built with `${}`.
@@ -24,7 +17,12 @@ const hidden: Record<From, string> = {
  * Fades its children in the first time they scroll into view.
  * Motion only runs for users without "reduce motion" (motion-safe:).
  */
-const Reveal = ({ children, className, from = "up", delay = 0 }: IProps) => {
+const Reveal = ({
+  children,
+  className,
+  from = "up",
+  delay = 0,
+}: RevealProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 

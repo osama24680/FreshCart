@@ -14,8 +14,8 @@ const deals = [
     code: "ORGANIC40",
     cta: { label: "Shop Now", href: "/products" },
     Watermark: Apple,
-    bg: "from-emerald-500 via-emerald-600 to-emerald-700",
-    btn: "text-emerald-600",
+    bg: "from-emerald-600 via-emerald-700 to-emerald-800",
+    btn: "text-emerald-700",
     from: "left" as const,
   },
   {
@@ -27,15 +27,16 @@ const deals = [
     code: "FRESH25",
     cta: { label: "Explore Now", href: "/products?sort=newest" },
     Watermark: Carrot,
-    bg: "from-orange-400 via-orange-500 to-rose-500",
-    btn: "text-orange-500",
+    bg: "from-orange-600 via-orange-600 to-rose-700",
+    btn: "text-orange-700",
     from: "right" as const,
   },
 ];
 
 const DealBanners = () => {
   return (
-    <section className="py-10">
+    // overflow-x-clip: banners start off to the side, which must not widen the page
+    <section className="overflow-x-clip py-10">
       <div className="container mx-auto px-4">
         <div className="grid gap-6 md:grid-cols-2">
           {deals.map((deal) => (
@@ -64,7 +65,7 @@ const DealBanners = () => {
                   </div>
 
                   <h3 className="mb-2 text-2xl font-bold md:text-3xl">{deal.title}</h3>
-                  <p className="mb-5 text-white/80">{deal.text}</p>
+                  <p className="mb-5 text-white/95">{deal.text}</p>
 
                   <div className="mb-6 flex flex-wrap items-center gap-4">
                     <div className="text-4xl leading-none font-black tracking-tight">
