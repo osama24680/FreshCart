@@ -1,34 +1,12 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, GitCompareArrows, Heart, Plus, Star } from "lucide-react";
+import { Eye, GitCompareArrows, Heart, Plus } from "lucide-react";
 import getProductsService from "@/api/products.service";
 import Loading from "../Loading/Loading";
+import Rating from "../Rating/Rating";
 import Reveal from "../Reveal/Reveal";
 import SectionHeading from "../SectionHeading/SectionHeading";
-
-const fiveStars = (className: string) =>
-  Array.from({ length: 5 }).map((_, i) => (
-    <Star key={i} className={`size-3.5 shrink-0 fill-current ${className}`} />
-  ));
-
-const Rating = ({ value }: { value: number }) => {
-  return (
-    <span
-      role="img"
-      aria-label={`Rated ${value} out of 5`}
-      className="relative inline-flex"
-    >
-      {fiveStars("text-gray-200")}
-      <span
-        style={{ width: `${(value / 5) * 100}%` }}
-        className="absolute inset-y-0 left-0 flex overflow-hidden"
-      >
-        {fiveStars("text-yellow-400")}
-      </span>
-    </span>
-  );
-};
 
 const actionClass =
   "flex size-7 items-center justify-center rounded-full bg-white text-gray-600 sm:size-8 shadow-sm transition-all duration-200 hover:scale-110";
