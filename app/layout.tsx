@@ -4,6 +4,7 @@ import AnnouncementBar from "./_components/AnnouncementBar/AnnouncementBar";
 import Features from "./_components/Features/Features";
 import Footer from "./_components/Footer/Footer";
 import Navbar from "./_components/Navbar/Navbar";
+import AppToaster from "./_components/AppToaster/AppToaster";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <Features />
         <Footer />
+        <AppToaster />
       </body>
     </html>
   );

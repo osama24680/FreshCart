@@ -22,8 +22,9 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { LoginSchemaType } from "@/types";
 import { loginValidationSchema } from "./loginValidation.schema";
-import userLogin from "./login.server";
 import { FacebookLogo, GoogleLogo } from "../AuthLogos";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const highlights = [
   { Icon: Truck, label: "Free Delivery" },
@@ -57,21 +58,28 @@ const LoginPage = () => {
     },
     resolver: zodResolver(loginValidationSchema),
   });
-  const { handleSubmit, control, setError, formState } = form;
+  const { handleSubmit, control, formState } = form;
 
   async function mySubmit(data: LoginSchemaType) {
     try {
-      const token = await userLogin(data);
-      if (!token) {
-        setError("root", { message: "Incorrect email or password" });
+      const response = await signIn("login", {
+        ...data,
+        redirect: false,
+      });
+
+      // id: clicking again replaces the toast instead of stacking a new one
+      if (!response?.ok) {
+        toast.error(response?.error ?? "Incorrect email or password", {
+          id: "auth",
+        });
         return;
       }
-      // TODO: save the token (NextAuth) before sending the user on
-      router.push("/");
+
+      toast.success("Welcome back! Happy shopping 🛒", { id: "auth" });
+      router.replace("/");
+      router.refresh();
     } catch {
-      setError("root", {
-        message: "Something went wrong. Please try again.",
-      });
+      toast.error("Something went wrong. Please try again.", { id: "auth" });
     }
   }
 
@@ -232,15 +240,6 @@ const LoginPage = () => {
               />
               Keep me signed in
             </label>
-
-            {formState.errors.root && (
-              <p
-                role="alert"
-                className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
-              >
-                {formState.errors.root.message}
-              </p>
-            )}
 
             <button
               type="submit"

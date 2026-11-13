@@ -14,10 +14,11 @@ import Rating from "@/app/_components/Rating/Rating";
 import { RegisterSchemaType } from "@/types";
 import { registerValidationSchema } from "./registerValidation.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import userRegister from "./signup.server";
 import { getPasswordStrength } from "./passwordStrength";
 import { useRouter } from "next/navigation";
 import { FacebookLogo, GoogleLogo } from "../AuthLogos";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 const features = [
   {
     Icon: Star,
@@ -43,7 +44,7 @@ const labelClass =
 const inputClass = `${controlHeight} border-gray-300 bg-white px-3 text-sm placeholder:text-gray-400 focus-visible:border-primary-500 focus-visible:ring-primary-500/20 md:text-sm lg:[@media(min-height:850px)]:text-base`;
 const socialClass = `${controlHeight} flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-800 lg:[@media(min-height:850px)]:text-base transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-sm`;
 
-const page = () => {
+const SignupPage = () => {
   const router = useRouter();
   const form = useForm<RegisterSchemaType>({
     defaultValues: {
@@ -56,11 +57,31 @@ const page = () => {
     resolver: zodResolver(registerValidationSchema),
   });
 
-  const { handleSubmit, control } = form;
+  const { handleSubmit, control, formState } = form;
 
   async function mySubmit(data: RegisterSchemaType) {
-    const token = await userRegister(data);
-    if (token) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { acceptTerms, ...body } = data; 
+      const response = await signIn("register", {
+        ...body,
+        redirect: false,
+      });
+
+      // id: clicking again replaces the toast instead of stacking a new one
+      if (!response?.ok) {
+        toast.error(
+          response?.error ?? "Email already exists or invalid data provided",
+          { id: "auth" },
+        );
+        return;
+      }
+
+      toast.success("Account created! Welcome to FreshCart 🎉", { id: "auth" });
+      router.replace("/");
+      router.refresh();
+    } catch {
+      toast.error("Something went wrong. Please try again.", { id: "auth" });
     }
   }
 
@@ -341,7 +362,8 @@ const page = () => {
 
             <button
               type="submit"
-              className={`group flex w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-primary-600 ${controlHeight} text-sm font-medium text-white lg:[@media(min-height:850px)]:text-base transition-all hover:-translate-y-0.5 hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-600/30`}
+              disabled={formState.isSubmitting}
+              className={`disabled:cursor-not-allowed disabled:opacity-60 group flex w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-primary-600 ${controlHeight} text-sm font-medium text-white lg:[@media(min-height:850px)]:text-base transition-all hover:-translate-y-0.5 hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-600/30`}
             >
               <UserPlus
                 className="size-4 transition-transform group-hover:scale-110"
@@ -366,4 +388,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignupPage;
