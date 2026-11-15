@@ -1,23 +1,15 @@
 import { baseURL } from "@/api/constants";
 import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-
+import { jwtDecode } from "jwt-decode";
 export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       id: "login",
       name: "Login...",
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "Enter your email ",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Enter your password ",
-        },
+        email: {},
+        password: {},
       },
 
       async authorize(credentials) {
@@ -34,9 +26,12 @@ export const authOptions: NextAuthOptions = {
         if (!res.ok || !result.user) {
           throw new Error(result.message || "Incorrect email or password");
         }
-
+        const jwt = jwtDecode(result.token);
+        console.log("jwt", jwt);
+        const { id, role } = jwt as { id: string; role: string };
         return {
-          id: result.user.email,
+          id,
+          role,
           name: result.user.name,
           email: result.user.email,
           token: result.token,
@@ -67,16 +62,20 @@ export const authOptions: NextAuthOptions = {
         });
         const result = await res.json();
 
-         if (!res.ok || !result.user) {
-           throw new Error(
-             result?.errors?.msg ??
-               result.message ??
-               "Could not create the account",
-           );
-         }
+        if (!res.ok || !result.user) {
+          throw new Error(
+            result?.errors?.msg ??
+              result.message ??
+              "Could not create the account",
+          );
+        }
 
+        const jwt = jwtDecode(result.token);
+        console.log("jwt", jwt);
+        const { id, role } = jwt as { id: string; role: string };
         return {
-          id: result.user.email,
+          id,
+          role,
           name: result.user.name,
           email: result.user.email,
           token: result.token,
@@ -85,12 +84,18 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
-      if (user) token.apiToken = user.token;
+    jwt(params) {
+      const { token, user } = params;
+      console.log("jwt callback", { token, user });
+      if (user) {
+        token.apiToken = user.token;
+        token.id = user.id;
+      }
+      console.log("apiToken", token);
       return token;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.BETTER_AUTH_SECRET,
   pages: {
     signIn: "/login",
   },
