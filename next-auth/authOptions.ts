@@ -94,8 +94,19 @@ export const authOptions: NextAuthOptions = {
       console.log("apiToken", token);
       return token;
     },
+    session(param) {
+      const { session, token } = param;
+      console.log("param.token", token);
+      console.log("param.session", session);
+      if (session.user) {
+        session.user.id = token.id ?? "";
+      }
+
+      return session;
+    },
   },
-  secret: process.env.BETTER_AUTH_SECRET,
+
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },

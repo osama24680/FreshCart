@@ -7,7 +7,7 @@ import Navbar from "./_components/Navbar/Navbar";
 import AppToaster from "./_components/AppToaster/AppToaster";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
+import Providers from "./_components/Providers";
 const exo = Exo({
   variable: "--font-exo",
   subsets: ["latin"],
@@ -22,12 +22,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={cn("font-sans", exo.variable)}>
       <body className="min-h-screen bg-white font-sans font-medium text-gray-700 antialiased">
-        <AnnouncementBar />
-        <Navbar />
-        {children}
-        <Features />
-        <Footer />
-        <AppToaster />
+        <Providers>
+          <AnnouncementBar />
+          <Navbar />
+          {children}
+          <Features />
+          <Footer />
+          <AppToaster />
+        </Providers>
       </body>
     </html>
   );

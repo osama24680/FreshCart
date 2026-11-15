@@ -7,11 +7,11 @@ import {
   Heart,
   Search,
   ShoppingCart,
-  User,
 } from "lucide-react";
 import CategoryMenu from "./CategoryMenu";
 import MobileMenu from "./MobileMenu";
 import { navLinks } from "./navLinks";
+import NavUser from "./NavUser";
 
 const Navbar = () => {
   return (
@@ -119,13 +119,8 @@ const Navbar = () => {
               <ShoppingCart className="size-5 text-gray-500 transition-all group-hover:-rotate-12 group-hover:text-primary-600" />
             </Link>
 
-            <Link
-              href="/login"
-              className="ml-2 hidden items-center gap-2 rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary-600/20 transition-all hover:-translate-y-0.5 hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-600/30 lg:flex"
-            >
-              <User className="size-3" />
-              Sign In
-            </Link>
+            {/* Client component: rendered here, not called like a function */}
+            <NavUser />
 
             <MobileMenu />
           </div>

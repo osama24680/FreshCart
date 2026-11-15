@@ -1,7 +1,11 @@
+"use client";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Gift, Mail, Phone, Truck, User, UserPlus } from "lucide-react";
 
 const AnnouncementBar = () => {
+  const { status } = useSession();
+  console.log(status);
   return (
     <div className="hidden border-b border-gray-100 text-sm lg:block">
       <div className="container mx-auto px-4">
@@ -35,24 +39,28 @@ const AnnouncementBar = () => {
               </a>
             </div>
 
-            <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
+            {status == "unauthenticated" && (
+              <>
+                <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
 
-            <div className="flex items-center gap-4 text-gray-600">
-              <Link
-                href="/login"
-                className="flex items-center gap-1.5 transition-colors hover:text-primary-600"
-              >
-                <User className="size-3" />
-                <span>Sign In</span>
-              </Link>
-              <Link
-                href="/signup"
-                className="flex items-center gap-1.5 transition-colors hover:text-primary-600"
-              >
-                <UserPlus className="size-3" />
-                <span>Sign Up</span>
-              </Link>
-            </div>
+                <div className="flex items-center gap-4 text-gray-600">
+                  <Link
+                    href="/login"
+                    className="flex items-center gap-1.5 transition-colors hover:text-primary-600"
+                  >
+                    <User className="size-3" />
+                    <span>Sign In</span>
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="flex items-center gap-1.5 transition-colors hover:text-primary-600"
+                  >
+                    <UserPlus className="size-3" />
+                    <span>Sign Up</span>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
