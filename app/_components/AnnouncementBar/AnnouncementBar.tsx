@@ -5,7 +5,6 @@ import { Gift, Mail, Phone, Truck, User, UserPlus } from "lucide-react";
 
 const AnnouncementBar = () => {
   const { status } = useSession();
-  console.log(status);
   return (
     <div className="hidden border-b border-gray-100 text-sm lg:block">
       <div className="container mx-auto px-4">

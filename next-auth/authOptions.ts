@@ -27,7 +27,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error(result.message || "Incorrect email or password");
         }
         const jwt = jwtDecode(result.token);
-        console.log("jwt", jwt);
         const { id, role } = jwt as { id: string; role: string };
         return {
           id,
@@ -71,7 +70,6 @@ export const authOptions: NextAuthOptions = {
         }
 
         const jwt = jwtDecode(result.token);
-        console.log("jwt", jwt);
         const { id, role } = jwt as { id: string; role: string };
         return {
           id,
@@ -86,18 +84,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt(params) {
       const { token, user } = params;
-      console.log("jwt callback", { token, user });
       if (user) {
         token.apiToken = user.token;
         token.id = user.id;
       }
-      console.log("apiToken", token);
       return token;
     },
     session(param) {
       const { session, token } = param;
-      console.log("param.token", token);
-      console.log("param.session", session);
+
       if (session.user) {
         session.user.id = token.id ?? "";
       }
@@ -106,7 +101,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
 
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.Next_AUTH_SECRET,
   pages: {
     signIn: "/login",
   },
